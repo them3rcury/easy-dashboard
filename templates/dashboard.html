@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-color-scheme="default">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            const savedDensity = localStorage.getItem('dashboardDensity');
+            if (savedDensity) {
+                document.documentElement.setAttribute('data-initial-density', savedDensity);
+            }
+            
+            const savedColorScheme = localStorage.getItem('dashboardColorScheme') || 'default';
+            document.documentElement.setAttribute('data-color-scheme', savedColorScheme);
+        })();
+    </script>
+</head>
+<body>
+    <header>
+        <h1 id="dashboard-title">My Dashboard</h1>
+        <div class="search-container">
+            <span class="material-icons-outlined">search</span>
+            <input type="search" id="search-bar" placeholder="Search links or groups...">
+        </div>
+        <div class="header-actions">
+            <button id="theme-switcher" class="icon-btn" title="Toggle Theme">
+                <span class="material-icons-outlined icon-light-mode">light_mode</span>
+                <span class="material-icons-outlined icon-dark-mode">dark_mode</span>
+            </button>
+            <button id="open-add-modal-btn" class="icon-btn" title="Add New Group">
+                <span class="material-icons-outlined">add</span>
+            </button>
+            <button id="open-settings-modal-btn" class="icon-btn" title="Settings">
+                <span class="material-icons-outlined">settings</span>
+            </button>
+            <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+        </div>
+    </header>
+
+    <main class="dashboard-container" id="dashboard-container">
+    </main>
+
+    <div id="no-results-message" style="display: none;">
+        <h2>No Results Found</h2>
+        <p>Try a different search term.</p>
+    </div>
+
+    <div id="add-group-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close-btn">&times;</span>
+            <h2>Add New Group</h2>
+            <div class="modal-form">
+                <input type="hidden" id="add-group-icon-input" value="folder">
+                <div class="input-with-icon-picker">
+                    <button type="button" class="icon-picker-btn" id="add-icon-picker-btn"></button>
+                    <input type="text" id="new-group-name-modal" placeholder="Group name">
+                </div>
+                <button id="add-group-btn-modal" class="button-primary">Add Group</button>
+            </div>
+        </div>
+    </div>
+    <div id="edit-group-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close-btn">&times;</span>
+            <h2>Edit Group</h2>
+            <div class="modal-form">
+                <input type="hidden" id="edit-group-id-modal">
+                <input type="hidden" id="edit-group-icon-input">
+                <div class="input-with-icon-picker">
+                    <button type="button" class="icon-picker-btn" id="edit-icon-picker-btn"></button>
+                    <input type="text" id="edit-group-name-modal" placeholder="New group name">
+                </div>
+                <button id="save-group-changes-btn" class="button-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    <div id="add-link-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close-btn">&times;</span>
+            <h2>Add New Link</h2>
+            <div class="modal-form">
+                <input type="hidden" id="add-link-group-id-modal">
+                <input type="text" id="new-link-title-modal" placeholder="Link Title" required>
+                <input type="url" id="new-link-url-modal" placeholder="https://example.com" required>
+                <button id="add-link-btn-modal" class="button-primary">Add Link</button>
+            </div>
+        </div>
+    </div>
+    <div id="edit-link-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close-btn">&times;</span>
+            <h2>Edit Link</h2>
+            <div class="modal-form">
+                <input type="hidden" id="edit-link-id-modal">
+                <input type="text" id="edit-link-title-modal" placeholder="Link Title" required>
+                <input type="url" id="edit-link-url-modal" placeholder="https://example.com" required>
+                <button id="save-link-changes-btn" class="button-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    <div id="icon-picker-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close-btn">&times;</span>
+            <h2>Choose an Icon</h2>
+            <div id="icon-picker-grid" class="icon-picker-grid"></div>
+        </div>
+    </div>
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close-btn">&times;</span>
+            <h2>Settings</h2>
+            <div class="modal-form">
+                <div class="setting-row">
+                    <label for="dashboard-title-input">Dashboard Title</label>
+                    <input type="text" id="dashboard-title-input" class="settings-input">
+                </div>
+                <div class="setting-row">
+                    <label for="density-setting">Layout Density</label>
+                    <div class="radio-group" id="density-setting">
+                        <input type="radio" id="density-compact" name="density" value="compact">
+                        <label for="density-compact">Compact</label>
+                        <input type="radio" id="density-default" name="density" value="default">
+                        <label for="density-default">Default</label>
+                        <input type="radio" id="density-comfortable" name="density" value="comfortable">
+                        <label for="density-comfortable">Comfortable</label>
+                    </div>
+                </div>
+                <div class="setting-row">
+                    <label for="color-scheme-setting">Color Scheme</label>
+                    <div class="radio-group" id="color-scheme-setting">
+                        <input type="radio" id="color-default" name="color-scheme" value="default">
+                        <label for="color-default">Default</label>
+                        <input type="radio" id="color-mint" name="color-scheme" value="mint">
+                        <label for="color-mint">Mint</label>
+                        <input type="radio" id="color-crimson" name="color-scheme" value="crimson">
+                        <label for="color-crimson">Crimson</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

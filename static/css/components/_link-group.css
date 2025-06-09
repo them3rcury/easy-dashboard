@@ -1,0 +1,148 @@
+.link-group {
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    box-shadow: 0 4px 16px var(--shadow-color);
+    animation: fadeInSlideUp 0.5s ease-out forwards;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.link-group:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px var(--shadow-color);
+}
+
+.link-group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+    cursor: grab;
+}
+
+.link-group-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    word-break: break-all;
+}
+
+.link-group-header .material-icons-outlined {
+    font-size: 22px;
+    color: var(--muted-foreground);
+    transition: color 0.2s ease;
+}
+
+.link-group-header:hover .material-icons-outlined {
+    color: var(--primary);
+}
+
+.group-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.link-group:hover .group-actions {
+    opacity: 1;
+}
+
+.links-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex-grow: 1;
+}
+
+.link-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0.5rem;
+    border-radius: var(--radius);
+    cursor: grab;
+    transition: all 0.2s ease-in-out;
+}
+
+.link-item:hover {
+    background-color: var(--secondary);
+    transform: translateX(4px);
+}
+
+.link-item a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--foreground);
+    font-weight: 500;
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.link-item a:hover {
+    color: var(--primary);
+}
+
+.link-item a span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.link-item .favicon {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    background-color: var(--secondary);
+    flex-shrink: 0;
+}
+
+.link-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.link-item:hover .link-actions {
+    opacity: 1;
+}
+
+body[data-density="compact"] .link-group {
+    padding: 1rem;
+}
+body[data-density="compact"] .links-list {
+    gap: 0.25rem;
+}
+body[data-density="compact"] .link-item {
+    padding: 0.4rem 0.5rem;
+}
+
+body[data-density="comfortable"] .dashboard-container {
+    gap: 24px;
+}
+body[data-density="comfortable"] .link-group {
+    padding: 1.5rem;
+}
+body[data-density="comfortable"] .links-list {
+    gap: 0.75rem;
+}
+body[data-density="comfortable"] .link-item {
+    padding: 0.75rem 0.5rem;
+}
