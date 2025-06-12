@@ -5,9 +5,9 @@ Have fun!
 
 ## Preview
 
-![Dashboard Preview](https://raw.githubusercontent.com/them3rcury/easy-dashboard/refs/heads/master/screenshots/preview3.png)
+![Dashboard Preview](https://raw.githubusercontent.com/them3rcury/easy-dashboard/refs/heads/main/screenshots/preview3.png)
 
-More screenshots can be found [here](https://github.com/them3rcury/easy-dashboard/tree/master/screenshots).
+More screenshots can be found [here](https://github.com/them3rcury/easy-dashboard/tree/main/screenshots).
 
 *demo soon™*
 
