@@ -101,3 +101,13 @@ The very first time you launch the app, it'll ask you to create an account. This
 * **Docker** for easy-peasy containerization
 
 Feel free to fork this repository, dive into the code, and make it your own. Want to add a new feature? Go for it!
+
+### To-Do List
+- [ ] Add favicon support for local domains
+- [ ] Implement link status check
+- [ ] Backup and restore functionality
+- [ ] Admin dashboard
+- [ ] Add the ability to sign-up, increase the user limit
+- [ ] Multiple dashboards per user
+- [ ] Command pallette
+- [ ] "Add Quick" bookmarklet
