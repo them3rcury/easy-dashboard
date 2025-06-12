@@ -45,10 +45,22 @@ document.addEventListener('DOMContentLoaded', () => {
         colorSchemeRadios: document.querySelectorAll('input[name="color-scheme"]'),
         dashboardTitleInput: document.getElementById('dashboard-title-input'),
         dashboardTitle: document.getElementById('dashboard-title'),
+
+        errorToast: document.getElementById('error-toast'),
     };
 
     const ICONS = ['folder', 'work', 'build', 'code', 'school', 'shopping_cart', 'receipt_long', 'videogame_asset', 'movie', 'music_note', 'book', 'restaurant', 'local_fire_department', 'flight', 'public', 'home'];
     let activeIconTarget = { button: null, input: null };
+    
+    async function handleApiCall(apiFunction, ...args) {
+        try {
+            await apiFunction(...args);
+            refreshDashboard();
+        } catch (error) {
+            console.error('API Error:', error);
+            ui.showErrorToast('An unexpected error occurred.');
+        }
+    }
     
     async function refreshDashboard() {
         try {
@@ -58,18 +70,18 @@ document.addEventListener('DOMContentLoaded', () => {
             initializeDragAndDrop();
         } catch (error) {
             console.error(error);
-            elements.dashboardContainer.innerHTML = `<p>${error.message}</p>`;
+            ui.showErrorToast('Failed to load dashboard data.');
         }
     }
     
     function initializeDragAndDrop() {
+        if (typeof Sortable === 'undefined') return;
         Sortable.create(elements.dashboardContainer, {
             animation: 150,
             handle: '.link-group-header',
             onEnd: async () => {
                 const groupsData = Array.from(document.querySelectorAll('.link-group')).map((groupEl, index) => ({
                     id: groupEl.dataset.groupId,
-                    position: index,
                     links: Array.from(groupEl.querySelectorAll('.link-item')).map(linkEl => linkEl.dataset.linkId)
                 }));
                 await api.updatePositions(groupsData);
@@ -82,7 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 onEnd: async () => {
                     const groupsData = Array.from(document.querySelectorAll('.link-group')).map((groupEl, index) => ({
                         id: groupEl.dataset.groupId,
-                        position: index,
                         links: Array.from(groupEl.querySelectorAll('.link-item')).map(linkEl => linkEl.dataset.linkId)
                     }));
                     await api.updatePositions(groupsData);
@@ -99,78 +110,78 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.newGroupNameInput.focus();
     });
 
-    elements.addGroupBtn.addEventListener('click', async () => {
+    elements.addGroupBtn.addEventListener('click', () => {
         const name = elements.newGroupNameInput.value.trim();
         const icon = elements.addGroupIconInput.value.trim();
         if (!name) return;
-        await api.addGroup(name, icon);
+        handleApiCall(api.addGroup, name, icon);
         ui.closeModal(elements.addGroupModal);
-        refreshDashboard();
     });
 
-    elements.saveGroupChangesBtn.addEventListener('click', async () => {
+    elements.saveGroupChangesBtn.addEventListener('click', () => {
         const groupId = elements.editGroupIdInput.value;
         const name = elements.editGroupNameInput.value.trim();
         const icon = elements.editGroupIconInput.value.trim();
         if (!name) return;
-        await api.updateGroup(groupId, name, icon);
+        handleApiCall(api.updateGroup, groupId, name, icon);
         ui.closeModal(elements.editGroupModal);
-        refreshDashboard();
     });
 
-    elements.addLinkBtnModal.addEventListener('click', async () => {
+    elements.addLinkBtnModal.addEventListener('click', () => {
         const groupId = elements.addLinkGroupIdInput.value;
         const title = elements.newLinkTitleInput.value.trim();
-        const url = elements.newLinkUrlInput.value.trim();
-        if (!title || !url) return alert('Title and URL are required.');
-        await api.addLink(groupId, title, url);
+        let url = elements.newLinkUrlInput.value.trim();
+        if (!title || !url) return ui.showErrorToast('Title and URL are required.');
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            url = 'https://' + url;
+        }
+        handleApiCall(api.addLink, groupId, title, url);
         ui.closeModal(elements.addLinkModal);
-        refreshDashboard();
     });
 
-    elements.saveLinkChangesBtn.addEventListener('click', async () => {
+    elements.saveLinkChangesBtn.addEventListener('click', () => {
         const linkId = elements.editLinkIdInput.value;
         const title = elements.editLinkTitleInput.value.trim();
-        const url = elements.editLinkUrlInput.value.trim();
-        if (!title || !url) return alert('Title and URL are required.');
-        await api.updateLink(linkId, title, url);
+        let url = elements.editLinkUrlInput.value.trim();
+        if (!title || !url) return ui.showErrorToast('Title and URL are required.');
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            url = 'https://' + url;
+        }
+        handleApiCall(api.updateLink, linkId, title, url);
         ui.closeModal(elements.editLinkModal);
-        refreshDashboard();
     });
 
-    elements.dashboardContainer.addEventListener('click', async (e) => {
+    elements.dashboardContainer.addEventListener('click', (e) => {
         const targetBtn = e.target.closest('button');
         if (!targetBtn) return;
 
+        const { groupId, linkId, groupName, groupIcon, linkTitle, linkUrl } = targetBtn.dataset;
+
         if (targetBtn.classList.contains('delete-group-btn')) {
             if (confirm('Are you sure you want to delete this group and all its links?')) {
-                await api.deleteGroup(targetBtn.dataset.groupId);
-                refreshDashboard();
+                handleApiCall(api.deleteGroup, groupId);
             }
-        }
-        if (targetBtn.classList.contains('delete-link-btn')) {
+        } else if (targetBtn.classList.contains('delete-link-btn')) {
             if (confirm('Are you sure you want to delete this link?')) {
-                await api.deleteLink(targetBtn.dataset.linkId);
-                refreshDashboard();
+                handleApiCall(api.deleteLink, linkId);
             }
-        }
-        if (targetBtn.classList.contains('add-link-to-group-btn')) {
-            elements.addLinkGroupIdInput.value = targetBtn.dataset.groupId;
+        } else if (targetBtn.classList.contains('add-link-to-group-btn')) {
+            elements.addLinkGroupIdInput.value = groupId;
+            elements.newLinkTitleInput.value = '';
+            elements.newLinkUrlInput.value = '';
             ui.openModal(elements.addLinkModal);
             elements.newLinkTitleInput.focus();
-        }
-        if (targetBtn.classList.contains('edit-group-btn')) {
-            elements.editGroupIdInput.value = targetBtn.dataset.groupId;
-            elements.editGroupIconInput.value = targetBtn.dataset.groupIcon;
-            elements.editIconPickerBtn.innerHTML = `<span class="material-icons-outlined">${targetBtn.dataset.groupIcon}</span>`;
-            elements.editGroupNameInput.value = decodeURIComponent(targetBtn.dataset.groupName);
+        } else if (targetBtn.classList.contains('edit-group-btn')) {
+            elements.editGroupIdInput.value = groupId;
+            elements.editGroupIconInput.value = groupIcon;
+            elements.editIconPickerBtn.innerHTML = `<span class="material-icons-outlined">${groupIcon}</span>`;
+            elements.editGroupNameInput.value = decodeURIComponent(groupName);
             ui.openModal(elements.editGroupModal);
             elements.editGroupNameInput.focus();
-        }
-        if (targetBtn.classList.contains('edit-link-btn')) {
-            elements.editLinkIdInput.value = targetBtn.dataset.linkId;
-            elements.editLinkTitleInput.value = decodeURIComponent(targetBtn.dataset.linkTitle);
-            elements.editLinkUrlInput.value = decodeURIComponent(targetBtn.dataset.linkUrl);
+        } else if (targetBtn.classList.contains('edit-link-btn')) {
+            elements.editLinkIdInput.value = linkId;
+            elements.editLinkTitleInput.value = decodeURIComponent(linkTitle);
+            elements.editLinkUrlInput.value = decodeURIComponent(linkUrl);
             ui.openModal(elements.editLinkModal);
             elements.editLinkTitleInput.focus();
         }
@@ -195,14 +206,20 @@ document.addEventListener('DOMContentLoaded', () => {
         activeIconTarget = { button: elements.editIconPickerBtn, input: elements.editGroupIconInput };
         ui.openModal(elements.iconPickerModal);
     });
-
+    
+    let debounceTimer;
     elements.searchBar.addEventListener('input', () => {
-        const query = elements.searchBar.value.toLowerCase().trim();
-        ui.handleSearch(query, elements.noResultsMessage);
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            const query = elements.searchBar.value.toLowerCase().trim();
+            ui.handleSearch(query, elements.noResultsMessage);
+        }, 300);
     });
 
-    elements.searchContainer.addEventListener('click', () => {
-        elements.searchBar.focus();
+    elements.searchContainer.addEventListener('click', (e) => {
+        if (e.target === elements.searchContainer) {
+            elements.searchBar.focus();
+        }
     });
 
     elements.searchBar.addEventListener('focus', () => {
@@ -217,6 +234,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.modal-close-btn').forEach(btn => btn.addEventListener('click', () => ui.closeModal(btn.closest('.modal'))));
     elements.openSettingsModalBtn.addEventListener('click', () => ui.openModal(elements.settingsModal));
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal.visible').forEach(ui.closeModal);
+        }
+    });
     window.addEventListener('click', (e) => {
         if (e.target.classList.contains('modal')) {
             ui.closeModal(e.target);

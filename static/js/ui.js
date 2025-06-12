@@ -6,10 +6,21 @@ export function setState(newState) {
 
 export function openModal(modal) {
     modal.classList.add('visible');
+    modal.querySelector('input, button')?.focus();
 }
 
 export function closeModal(modal) {
     modal.classList.remove('visible');
+}
+
+export function showErrorToast(message) {
+    const toast = document.getElementById('error-toast');
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add('visible');
+    setTimeout(() => {
+        toast.classList.remove('visible');
+    }, 3000);
 }
 
 function createGroupElement(group) {
@@ -52,7 +63,7 @@ function createGroupElement(group) {
                 <button class="icon-btn add-link-to-group-btn" data-group-id="${group.id}" title="Add Link">
                     <span class="material-icons-outlined">add</span>
                 </button>
-                <button class="icon-btn edit-group-btn" data-group-id="${group.id}" data-group-name="${encodeURIComponent(group.name)}" data-group-icon="${group.icon}">
+                <button class="icon-btn edit-group-btn" data-group-id="${group.id}" data-group-name="${encodeURIComponent(group.name)}" data-group-icon="${group.icon || 'folder'}">
                     <span class="material-icons-outlined">edit</span>
                 </button>
                 <button class="icon-btn delete-btn delete-group-btn" data-group-id="${group.id}">
@@ -70,7 +81,14 @@ export function renderDashboard(dashboardContainer, noResultsMessage) {
     noResultsMessage.style.display = 'none';
 
     if (state.groups.length === 0 && document.getElementById('search-bar').value === '') {
-        dashboardContainer.innerHTML = '<p>No groups added yet. Click the "+" button to add your first group!</p>';
+        const emptyState = document.createElement('div');
+        emptyState.className = 'login-container';
+        emptyState.style.margin = '40px auto';
+        emptyState.innerHTML = `
+            <h2>Welcome!</h2>
+            <p>No groups yet. Click the <span class="material-icons-outlined">add</span> button to create your first group.</p>
+        `;
+        dashboardContainer.appendChild(emptyState);
         return;
     }
 

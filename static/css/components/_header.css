@@ -6,6 +6,7 @@ header {
     max-width: 1400px;
     margin: 0 auto 40px auto;
     padding: 0 10px;
+    flex-wrap: wrap;
 }
 
 header h1 {
@@ -29,7 +30,7 @@ header h1 {
     background-color: transparent;
     border: 1px solid var(--border);
     border-radius: 20px;
-    transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), background-color 0.2s;
     cursor: pointer;
 }
 
@@ -53,4 +54,25 @@ header h1 {
     color: var(--muted-foreground);
     pointer-events: none;
     z-index: 2;
+}
+
+@media (max-width: 768px) {
+    header {
+        gap: 0.75rem;
+        margin-bottom: 20px;
+    }
+
+    .search-container {
+        order: 3;
+        width: 100%;
+        max-width: none;
+    }
+
+    .search-container.focused {
+        width: 100%;
+    }
+    
+    header h1 {
+        font-size: 20px;
+    }
 }

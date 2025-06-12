@@ -15,10 +15,8 @@
             const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
             document.documentElement.setAttribute('data-theme', savedTheme);
 
-            const savedDensity = localStorage.getItem('dashboardDensity');
-            if (savedDensity) {
-                document.documentElement.setAttribute('data-initial-density', savedDensity);
-            }
+            const savedDensity = localStorage.getItem('dashboardDensity') || 'default';
+            document.body.setAttribute('data-density', savedDensity);
             
             const savedColorScheme = localStorage.getItem('dashboardColorScheme') || 'default';
             document.documentElement.setAttribute('data-color-scheme', savedColorScheme);
@@ -54,6 +52,8 @@
         <h2>No Results Found</h2>
         <p>Try a different search term.</p>
     </div>
+    
+    <div id="error-toast" class="error-toast"></div>
 
     <div id="add-group-modal" class="modal">
         <div class="modal-content">
@@ -129,7 +129,7 @@
                     <div class="radio-group" id="density-setting">
                         <input type="radio" id="density-compact" name="density" value="compact">
                         <label for="density-compact">Compact</label>
-                        <input type="radio" id="density-default" name="density" value="default">
+                        <input type="radio" id="density-default" name="density" value="default" checked>
                         <label for="density-default">Default</label>
                         <input type="radio" id="density-comfortable" name="density" value="comfortable">
                         <label for="density-comfortable">Comfortable</label>
@@ -138,7 +138,7 @@
                 <div class="setting-row">
                     <label for="color-scheme-setting">Color Scheme</label>
                     <div class="radio-group" id="color-scheme-setting">
-                        <input type="radio" id="color-default" name="color-scheme" value="default">
+                        <input type="radio" id="color-default" name="color-scheme" value="default" checked>
                         <label for="color-default">Default</label>
                         <input type="radio" id="color-mint" name="color-scheme" value="mint">
                         <label for="color-mint">Mint</label>
