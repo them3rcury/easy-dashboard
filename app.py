@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, f
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+import requests
 import os
 
 app = Flask(__name__)
@@ -229,3 +230,30 @@ def update_positions():
 
     db.session.commit()
     return jsonify({'message': 'Positions updated successfully'})
+
+@app.route('/api/check-status', methods=['POST'])
+@login_required
+def check_status():
+    data = request.get_json()
+    url = data.get('url')
+    if not url:
+        return jsonify({'error': 'URL is required'}), 400
+
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
+
+    try:
+        response = requests.head(url, timeout=5, allow_redirects=True, headers=headers)
+        if response.ok:
+            return jsonify({'status': 'online'})
+    except requests.RequestException:
+        pass
+    try:
+        response = requests.get(url, timeout=5, allow_redirects=True, headers=headers, stream=True)
+        if response.ok:
+            return jsonify({'status': 'online'})
+        else:
+            return jsonify({'status': 'offline', 'code': response.status_code})
+    except requests.RequestException:
+        return jsonify({'status': 'offline'})

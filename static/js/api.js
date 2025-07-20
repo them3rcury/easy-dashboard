@@ -53,3 +53,15 @@ export async function updatePositions(groupsData) {
         body: JSON.stringify({ groups: groupsData }),
     });
 }
+
+export async function checkLinkStatus(url) {
+    const response = await fetch('/api/check-status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+    });
+    if (!response.ok) {
+        throw new Error('Failed to check link status');
+    }
+    return response.json();
+}

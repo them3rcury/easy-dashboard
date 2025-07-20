@@ -124,6 +124,23 @@
     opacity: 1;
 }
 
+.link-status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--muted-foreground);
+    flex-shrink: 0;
+    transition: background-color 0.3s ease;
+}
+
+.link-status.online {
+    background-color: hsl(140, 60%, 60%);
+}
+
+.link-status.offline {
+    background-color: var(--destructive);
+}
+
 body[data-density="compact"] .link-group {
     padding: 1rem;
 }

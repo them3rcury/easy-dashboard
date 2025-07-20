@@ -62,12 +62,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    function checkAllLinkStatuses() {
+        const linkElements = document.querySelectorAll('.link-item a');
+        linkElements.forEach(async (linkElement) => {
+            const url = linkElement.href;
+            const statusElement = linkElement.querySelector('.link-status');
+            if (!statusElement) return;
+    
+            try {
+                const result = await api.checkLinkStatus(url);
+                if (result.status === 'online') {
+                    statusElement.classList.add('online');
+                    statusElement.title = 'Status: Online';
+                } else {
+                    statusElement.classList.add('offline');
+                    statusElement.title = `Status: Offline${result.code ? ` (Code: ${result.code})` : ''}`;
+                }
+            } catch (error) {
+                console.error(`Failed to check status for ${url}`, error);
+                statusElement.classList.add('offline');
+                statusElement.title = 'Status: Error checking status';
+            }
+        });
+    }
+
     async function refreshDashboard() {
         try {
             const data = await api.fetchDashboardData();
             ui.setState({ groups: data });
             ui.renderDashboard(elements.dashboardContainer, elements.noResultsMessage);
             initializeDragAndDrop();
+            checkAllLinkStatuses();
         } catch (error) {
             console.error(error);
             ui.showErrorToast('Failed to load dashboard data.');

@@ -41,6 +41,7 @@ function createGroupElement(group) {
         return `
             <li class="link-item" data-link-id="${link.id}" data-link-title="${link.title.toLowerCase()}" data-link-url="${link.url.toLowerCase()}">
                 <a href="${link.url}" target="_blank" rel="noopener noreferrer">
+                    <span class="link-status" title="Checking status..."></span>
                     <img src="${faviconUrl}" class="favicon" alt="" loading="lazy" onerror="this.style.display='none'">
                     <span>${link.title}</span>
                 </a>
