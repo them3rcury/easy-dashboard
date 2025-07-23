@@ -1,0 +1,108 @@
+.greeting-header {
+    max-width: 1400px;
+    margin: 0 auto 40px auto;
+    padding: 0 10px;
+}
+
+.greeting-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 32px;
+    background: linear-gradient(135deg, var(--card) 0%, var(--secondary) 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+.greeting-left {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.date-display {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted-foreground);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.greeting-message {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--foreground);
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.greeting-right {
+    display: flex;
+    align-items: center;
+}
+
+.weather-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 20px;
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) * 0.75);
+}
+
+.weather-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--primary);
+    border-radius: 50%;
+    color: var(--primary-foreground);
+}
+
+.weather-icon .material-icons-outlined {
+    font-size: 20px;
+}
+
+.weather-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.temperature {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--foreground);
+}
+
+.humidity {
+    font-size: 14px;
+    color: var(--muted-foreground);
+}
+
+@media (max-width: 768px) {
+    .greeting-header {
+        margin-bottom: 20px;
+    }
+    
+    .greeting-content {
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+        text-align: center;
+    }
+    
+    .greeting-message {
+        font-size: 24px;
+    }
+    
+    .weather-info {
+        gap: 12px;
+        padding: 10px 16px;
+    }
+}

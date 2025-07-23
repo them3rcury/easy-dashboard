@@ -2,6 +2,7 @@
 @import url('base/_base.css');
 
 @import url('components/_header.css');
+@import url('components/_greeting.css');
 @import url('components/_form.css');
 @import url('components/_button.css');
 @import url('components/_link-group.css');

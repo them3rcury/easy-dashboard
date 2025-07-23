@@ -270,6 +270,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    function updateGreeting() {
+        const now = new Date();
+        const dateDisplay = document.getElementById('date-display');
+        const greetingMessage = document.getElementById('greeting-message');
+        
+        if (dateDisplay) {
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            dateDisplay.textContent = now.toLocaleDateString('en-US', options).toUpperCase();
+        }
+        
+        if (greetingMessage) {
+            const hour = now.getHours();
+            let greeting;
+            
+            if (hour < 12) {
+                greeting = 'Good morning!';
+            } else if (hour < 17) {
+                greeting = 'Good afternoon!';
+            } else {
+                greeting = 'Good evening!';
+            }
+            
+            greetingMessage.textContent = greeting;
+        }
+    }
+    
+    function initializeGreeting() {
+        updateGreeting();
+        setInterval(updateGreeting, 60000);
+    }
+
+    initializeGreeting();
     initializeSettings(elements);
     refreshDashboard();
 });
