@@ -21,9 +21,11 @@ body {
     background-position: 0 0, 10px 10px;
     color: var(--foreground);
     margin: 0;
-    padding: 20px;
+    padding: var(--spacing-lg);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
 }
 
 .material-icons-outlined {
@@ -62,9 +64,10 @@ body {
     display: grid;
     max-width: 1400px;
     margin: 0 auto;
-    gap: 20px;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     justify-content: center;
+    align-items: start;
 }
 
 #no-results-message {
@@ -105,17 +108,59 @@ body {
     transform: translate(-50%, -10px);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
     body {
-        padding: 10px;
+        padding: var(--spacing-sm);
     }
-
-    .login-container {
-        margin-top: 40px;
-        padding: 1.5rem;
-    }
-
+    
     .dashboard-container {
         grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .login-container {
+        margin: var(--spacing-lg) auto;
+        padding: var(--spacing-lg);
+        max-width: calc(100% - var(--spacing-md));
+    }
+    
+    .error-toast {
+        left: var(--spacing-sm);
+        right: var(--spacing-sm);
+        transform: none;
+        max-width: none;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 640px) {
+    body {
+        padding: var(--spacing-md);
+    }
+    
+    .dashboard-container {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+    body {
+        padding: var(--spacing-lg);
+    }
+    
+    .dashboard-container {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+    
+    .login-container {
+        margin-top: var(--spacing-xl);
+        padding: var(--spacing-xl);
+    }
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        margin-top: var(--spacing-xl);
+        padding: var(--spacing-lg);
     }
 }

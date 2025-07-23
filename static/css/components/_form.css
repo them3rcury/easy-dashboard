@@ -1,25 +1,68 @@
 input[type="text"],
 input[type="password"],
 input[type="url"],
-input[type="search"] {
+input[type="search"],
+input[type="email"],
+select,
+textarea {
     width: 100%;
-    padding: 0.85rem 1rem;
+    padding: var(--spacing-sm) var(--spacing-md);
     border: 1px solid var(--border);
-    background-color: var(--secondary);
+    background-color: var(--background);
     border-radius: var(--radius);
     font-size: 14px;
     color: var(--foreground);
-    transition: all 0.2s ease-in-out;
+    transition: border-color 0.2s, box-shadow 0.2s;
     outline: none;
+    min-height: var(--touch-target);
+    touch-action: manipulation;
 }
 
 input[type="text"]:focus,
 input[type="password"]:focus,
 input[type="url"]:focus,
-input[type="search"]:focus {
-    border-color: var(--ring);
-    box-shadow: 0 0 0 3px hsla(221, 83%, 60%, 0.2);
-    background-color: var(--background);
+input[type="search"]:focus,
+input[type="email"]:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary-foreground);
+    font-size: 16px;
+}
+
+@media (max-width: 480px) {
+    input[type="text"],
+    input[type="password"],
+    input[type="url"],
+    input[type="search"],
+    input[type="email"],
+    select,
+    textarea {
+        padding: var(--spacing-md);
+        min-height: var(--touch-target-lg);
+        font-size: 16px;
+    }
+    
+    .form-group {
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    label {
+        font-size: 14px;
+        margin-bottom: var(--spacing-xs);
+    }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    input[type="text"],
+    input[type="password"],
+    input[type="url"],
+    input[type="search"],
+    input[type="email"],
+    select,
+    textarea {
+        min-height: var(--touch-target-lg);
+    }
 }
 
 .flash-message {

@@ -2,11 +2,12 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 1rem;
+    gap: var(--spacing-md);
     max-width: 1400px;
-    margin: 0 auto 40px auto;
-    padding: 0 10px;
+    margin: 0 auto var(--spacing-xl) auto;
+    padding: 0 var(--spacing-sm);
     flex-wrap: wrap;
+    min-height: var(--touch-target-lg);
 }
 
 header h1 {
@@ -24,14 +25,15 @@ header h1 {
 
 .search-container {
     position: relative;
-    height: 40px;
-    width: 40px;
+    height: var(--touch-target);
+    width: var(--touch-target);
     max-width: 400px;
     background-color: transparent;
     border: 1px solid var(--border);
-    border-radius: 20px;
-    transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), background-color 0.2s;
+    border-radius: calc(var(--touch-target) / 2);
+    transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), background-color 0.2s, border-radius 0.2s;
     cursor: pointer;
+    touch-action: manipulation;
 }
 
 .search-container.focused {
@@ -56,23 +58,76 @@ header h1 {
     z-index: 2;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
     header {
-        gap: 0.75rem;
-        margin-bottom: 20px;
+        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-md);
+        padding: 0;
+        flex-direction: column;
+        align-items: stretch;
     }
-
+    
+    header h1 {
+        font-size: 18px;
+        text-align: center;
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .header-actions {
+        justify-content: center;
+        gap: var(--spacing-sm);
+        order: 2;
+    }
+    
     .search-container {
         order: 3;
         width: 100%;
         max-width: none;
+        height: var(--touch-target-lg);
+        border-radius: var(--radius);
     }
-
+    
     .search-container.focused {
         width: 100%;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 640px) {
+    header {
+        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-lg);
     }
     
     header h1 {
         font-size: 20px;
+    }
+    
+    .search-container {
+        order: 3;
+        width: 100%;
+        max-width: none;
+        height: var(--touch-target-lg);
+        border-radius: var(--radius);
+    }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+    header {
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    header h1 {
+        font-size: 22px;
+    }
+    
+    .search-container {
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-actions {
+        gap: var(--spacing-sm);
     }
 }

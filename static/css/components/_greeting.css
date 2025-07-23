@@ -1,19 +1,21 @@
 .greeting-header {
     max-width: 1400px;
-    margin: 0 auto 40px auto;
-    padding: 0 10px;
+    margin: 0 auto var(--spacing-xl) auto;
+    padding: 0 var(--spacing-sm);
 }
 
 .greeting-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 24px 32px;
+    padding: var(--spacing-lg) var(--spacing-xl);
     background: linear-gradient(135deg, var(--card) 0%, var(--secondary) 100%);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 20px var(--shadow-color);
+    min-height: var(--touch-target-lg);
+    overflow: hidden;
 }
 
 .greeting-left {
@@ -85,24 +87,62 @@
     color: var(--muted-foreground);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
     .greeting-header {
-        margin-bottom: 20px;
+        margin-bottom: var(--spacing-md);
+        padding: 0;
     }
     
     .greeting-content {
         flex-direction: column;
-        gap: 20px;
-        padding: 20px;
+        gap: var(--spacing-md);
+        padding: var(--spacing-md);
+        text-align: center;
+    }
+    
+    .greeting-left {
+        gap: var(--spacing-xs);
+    }
+    
+    .date-display {
+        font-size: 12px;
+    }
+    
+    .greeting-message {
+        font-size: 20px;
+        line-height: 1.2;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 640px) {
+    .greeting-header {
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .greeting-content {
+        flex-direction: column;
+        gap: var(--spacing-lg);
+        padding: var(--spacing-lg);
         text-align: center;
     }
     
     .greeting-message {
         font-size: 24px;
     }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+    .greeting-content {
+        padding: var(--spacing-lg);
+    }
     
-    .weather-info {
-        gap: 12px;
-        padding: 10px 16px;
+    .greeting-message {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 768px) {
+    .greeting-header {
+        margin-bottom: var(--spacing-lg);
     }
 }

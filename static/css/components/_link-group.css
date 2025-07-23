@@ -9,6 +9,7 @@
     display: flex;
     flex-direction: column;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    -webkit-overflow-scrolling: touch;
 }
 
 .link-group:hover {
@@ -72,10 +73,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.6rem 0.5rem;
+    padding: var(--spacing-sm, 0.6rem) 0.5rem;
     border-radius: var(--radius);
     cursor: grab;
     transition: all 0.2s ease-in-out;
+    min-height: var(--touch-target, 44px);
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .link-item:hover {
@@ -162,4 +167,51 @@ body[data-density="comfortable"] .links-list {
 }
 body[data-density="comfortable"] .link-item {
     padding: 0.75rem 0.5rem;
+}
+
+@media (max-width: 480px) {
+    .link-group {
+        padding: var(--spacing-sm);
+        gap: var(--spacing-xs);
+    }
+    
+    .link-item {
+        padding: var(--spacing-md);
+        min-height: var(--touch-target-lg);
+    }
+    
+    body[data-density="compact"] .link-item {
+        padding: var(--spacing-sm);
+        min-height: var(--touch-target);
+    }
+    
+    body[data-density="comfortable"] .link-item {
+        padding: var(--spacing-lg);
+        min-height: var(--touch-target-lg);
+    }
+    
+    .link-icon {
+        width: 20px;
+        height: 20px;
+        margin-right: var(--spacing-sm);
+    }
+    
+    .link-text {
+        font-size: 16px;
+    }
+    
+    .link-status {
+        font-size: 12px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    .link-group {
+        padding: var(--spacing-md);
+    }
+    
+    .link-item {
+        min-height: var(--touch-target-lg);
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
 }
